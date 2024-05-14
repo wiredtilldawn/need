@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "514930678862",
+    "project_id": "need-3c5ef",
+    "storage_bucket": "need-3c5ef.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:514930678862:android:796e11ac15cb3a2ca8b71f",
+        "android_client_info": {
+          "package_name": "com.lakala.need"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuadD1L_LZ1APUpu4rrWOPVKqk8GU2Mfs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
