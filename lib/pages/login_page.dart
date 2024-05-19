@@ -20,61 +20,83 @@ class _LoginPageState extends State<LoginPage> {
 
   //sign user in
   void signIn() async{
-    await FirebaseAuth.instance.signInWithEmailAndPassword(email: emailTextController.text, password: passwordTextController.text);
+    //show loading screen
+    showDialog(context: context, builder: (context) => const Center(
+        child: CircularProgressIndicator(),
+    ));
+
+    //try sign in
+    try{
+      await FirebaseAuth.instance.signInWithEmailAndPassword(email: emailTextController.text, password: passwordTextController.text);
+      //pop loading screen
+      if(context.mounted) Navigator.pop(context);
+    } on FirebaseAuthException catch (e){
+      Navigator.pop(context);
+      displayMessage(e.code);
+    }
+  }
+
+  //display a dialog message
+  void displayMessage(String message){
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(message),
+        ),
+      );
   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
        backgroundColor: Colors.grey[300],
-       body: SafeArea(
-         child: Center(
-           child: Padding(
-             padding: const EdgeInsets.symmetric(horizontal: 25.0),
-             child: Column(
+       body: Stack(
+       children: [
+         Positioned.fill(
+         child: ListView(
+           padding: const EdgeInsets.symmetric(horizontal: 25.0),
+           children: [
+             SizedBox(height: MediaQuery.of(context).size.height * 0.2),
+
+             //logo
+             const Icon(Icons.lock,size: 100,),
+
+             const SizedBox(height: 50,),
+
+             //welcome back
+             Center(child: Text("Welcome back, you have been missed",  style: TextStyle(color: Colors.grey[700]),)),
+
+             const SizedBox(height: 25,),
+
+             //email
+             MyTextField(controller: emailTextController, hintText: "Email", obscureText: false),
+
+             const SizedBox(height: 10,),
+
+             //password
+             MyTextField(controller: passwordTextController, hintText: "Password", obscureText: true),
+
+             const SizedBox(height: 10,),
+
+             //sign in button
+             MyButton(onTap: signIn, text: 'Sign In',),
+
+             const SizedBox(height: 25,),
+
+             //go to register page
+             Row(
                mainAxisAlignment: MainAxisAlignment.center,
                children: [
-                 //logo
-                 const Icon(Icons.lock,size: 100,),
+                 Text("Not a member?", style: TextStyle(color: Colors.grey[700]),),
+                 const SizedBox(width: 4,),
 
-                 const SizedBox(height: 50,),
-
-                 //welcome back
-                 Text("Welcome back, you have been missed",  style: TextStyle(color: Colors.grey[700]),),
-
-                 const SizedBox(height: 25,),
-
-                 //email
-                 MyTextField(controller: emailTextController, hintText: "Email", obscureText: false),
-
-                 const SizedBox(height: 10,),
-
-                 //password
-                 MyTextField(controller: passwordTextController, hintText: "Password", obscureText: true),
-
-                 const SizedBox(height: 10,),
-
-                 //sign in button
-                 MyButton(onTap: signIn, text: 'Sign In',),
-
-                 const SizedBox(height: 25,),
-
-                 //go to register page
-                 Row(
-                   mainAxisAlignment: MainAxisAlignment.center,
-                   children: [
-                     Text("Not a member?", style: TextStyle(color: Colors.grey[700]),),
-                     const SizedBox(width: 4,),
-
-                     GestureDetector(
-                         onTap: widget.onTap,
-                         child: const Text("Register Now", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue,),))
-                   ],
-                 )
+                 GestureDetector(
+                     onTap: widget.onTap,
+                     child: const Text("Register Now", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue,),))
                ],
-             ),
-           ),
+             )
+           ],
          ),
-       ),
+       ),],),
 
 
     );

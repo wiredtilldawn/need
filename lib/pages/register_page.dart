@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../components/button.dart';
@@ -16,62 +17,111 @@ class _RegisterPageState extends State<RegisterPage> {
   final passwordTextController = TextEditingController();
   final confirmPasswordTextController = TextEditingController();
 
-  @override
+  void signUp() async{
+    //show loading circle
+    showDialog(context: context, builder: (context) => const Center(child: CircularProgressIndicator(),
+    ),
+    );
+
+    //password match
+    if(passwordTextController.text!=confirmPasswordTextController.text){
+      //pop loading circle
+      Navigator.pop(context);
+      //show error message to user
+      displayMessage("Passwords do not match!");
+      return;
+    }
+
+    //try creating the user
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(email: emailTextController.text, password: passwordTextController.text);
+
+      if(context.mounted)
+        Navigator.pop(context);
+    }
+
+    on FirebaseAuthException catch (e) {
+      //pop loading circle
+      Navigator.pop(context);
+
+      //show error to user
+      displayMessage(e.code);
+    }
+
+  }
+
+  //try creating the user
+
+
+  void displayMessage(String message){
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(message),
+      ),
+    );
+  }
+
+
+
+
+    @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[300],
-      body: SafeArea(
-        child: Center(
-          child: Padding(
+      body: Stack(
+        children: [
+          Positioned.fill(
+          child: ListView(
             padding: const EdgeInsets.symmetric(horizontal: 25.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                //logo
-                const Icon(Icons.lock,size: 100,),
+            children: [
+              SizedBox(height: MediaQuery.of(context).size.height * 0.2),
 
-                const SizedBox(height: 50,),
+              //logo
+              const Icon(Icons.lock,size: 100,),
 
-                //welcome back
-                Text("Let's create an account for you",  style: TextStyle(color: Colors.grey[700]),),
+              const SizedBox(height: 50,),
 
-                const SizedBox(height: 25,),
+              //welcome back
+              Center(child: Text("Let's create an account for you",  style: TextStyle(color: Colors.grey[700]),)),
 
-                //email
-                MyTextField(controller: emailTextController, hintText: "Email", obscureText: false),
+              const SizedBox(height: 25,),
 
-                const SizedBox(height: 10,),
+              //email
+              MyTextField(controller: emailTextController, hintText: "Email", obscureText: false),
 
-                //password
-                MyTextField(controller: passwordTextController, hintText: "Password", obscureText: true),
+              const SizedBox(height: 10,),
 
-                const SizedBox(height: 10,),
+              //password
+              MyTextField(controller: passwordTextController, hintText: "Password", obscureText: true),
 
-                MyTextField(controller: confirmPasswordTextController, hintText: "Confirm Password", obscureText: true),
+              const SizedBox(height: 10,),
 
-                const SizedBox(height: 10,),
+              MyTextField(controller: confirmPasswordTextController, hintText: "Confirm Password", obscureText: true),
 
-                //sign in button
-                MyButton(onTap: (){}, text: 'Sign Up',),
+              const SizedBox(height: 10,),
 
-                const SizedBox(height: 25,),
+              //sign in button
+              MyButton(onTap: signUp, text: 'Sign Up',),
 
-                //go to register page
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("Already have an account?", style: TextStyle(color: Colors.grey[700]),),
-                    const SizedBox(width: 4,),
+              const SizedBox(height: 25,),
 
-                    GestureDetector(
-                        onTap: widget.onTap,
-                        child: const Text("Login here", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue,),))
-                  ],
-                )
-              ],
-            ),
+              //go to register page
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Already have an account?", style: TextStyle(color: Colors.grey[700]),),
+                  const SizedBox(width: 4,),
+
+                  GestureDetector(
+                      onTap: widget.onTap,
+                      child: const Text("Login here", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue,),))
+                ],
+              )
+            ],
           ),
         ),
+            ],
       ),
 
 
