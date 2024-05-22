@@ -4,9 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:need/components/text_field.dart';
 import 'package:need/components/wall_post.dart';
 import 'package:need/pages/profile_page.dart';
+import 'package:provider/provider.dart';
+import 'package:need/helper/theme_provider.dart';
 
 import '../components/drawer.dart';
 import '../helper/helper_methods.dart';
+import '../theme/dark_theme.dart';
+import '../theme/light_theme.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -52,21 +56,42 @@ class _HomePageState extends State<HomePage> {
     Navigator.pop(context);
 
     //go to profile page
-    Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfilePage()));
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ChangeNotifierProvider.value(
+          value: context.read<ThemeProvider>(),
+          child: Consumer<ThemeProvider>(
+            builder: (context, themeProvider, child) => MaterialApp(
+              theme: lightTheme,
+              darkTheme: darkTheme,
+              debugShowCheckedModeBanner: false,
+              themeMode: themeProvider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+              home: const ProfilePage(),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
-        backgroundColor: Colors.grey[900],
         centerTitle: true,
-        title: Text("need",
-            style: TextStyle(
-          color: Colors.white,
-        ),),
-        iconTheme: IconThemeData(color: Colors.white,),
+        title: Text("need", ),
+        actions: [
+          IconButton(
+            icon: Icon(
+              context.watch<ThemeProvider>().isDarkMode ? Icons.brightness_3 : Icons.brightness_7,
+            ),
+            onPressed: () {
+              context.read<ThemeProvider>().toggleTheme();
+            },
+          ),
+        ],
         elevation: 0,
       ),
       drawer: MyDrawer(

@@ -3,6 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:need/components/button.dart';
 import 'package:need/components/text_field.dart';
+import 'package:provider/provider.dart';
+
+import '../helper/theme_provider.dart';
 
 
 
@@ -48,14 +51,26 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       backgroundColor: Colors.grey[300],
+       backgroundColor: Theme.of(context).colorScheme.background,
+       appBar: AppBar(
+         actions: [
+           IconButton(
+             icon: Icon(
+               context.watch<ThemeProvider>().isDarkMode ? Icons.brightness_3 : Icons.brightness_7,
+             ),
+             onPressed: () {
+               context.read<ThemeProvider>().toggleTheme();
+             },
+           ),
+         ],
+       ),
        body: Stack(
        children: [
          Positioned.fill(
          child: ListView(
            padding: const EdgeInsets.symmetric(horizontal: 25.0),
            children: [
-             SizedBox(height: MediaQuery.of(context).size.height * 0.2),
+
 
              //logo
              const Icon(Icons.lock,size: 100,),

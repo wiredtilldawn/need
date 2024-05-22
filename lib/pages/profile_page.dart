@@ -2,6 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:need/components/text_box.dart';
+import 'package:provider/provider.dart';
+
+import '../helper/theme_provider.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key,});
@@ -51,12 +54,21 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
-        title: Text("Profile Page",style: TextStyle(color: Colors.white,),),
+        title: Text("Profile Page",),
         centerTitle: true,
-        backgroundColor: Colors.grey[900],
-        iconTheme: IconThemeData(color: Colors.white,),
+        actions: [
+          IconButton(
+            icon: Icon(
+              context.watch<ThemeProvider>().isDarkMode ? Icons.brightness_3 : Icons.brightness_7,
+            ),
+            onPressed: () {
+              context.read<ThemeProvider>().toggleTheme();
+            },
+          ),
+        ],
+
       ),
 
       body: StreamBuilder<DocumentSnapshot>(
