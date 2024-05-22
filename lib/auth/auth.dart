@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 
 import '../helper/theme_provider.dart';
 import '../pages/home_page.dart';
+import '../pages/profile_page.dart';
 import '../theme/dark_theme.dart';
 import '../theme/light_theme.dart';
 

@@ -68,6 +68,10 @@ class _HomePageState extends State<HomePage> {
               debugShowCheckedModeBanner: false,
               themeMode: themeProvider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
               home: const ProfilePage(),
+              routes: {
+                '/home': (context) => HomePage(),
+                '/profile': (context) => ProfilePage(),
+              },
             ),
           ),
         ),

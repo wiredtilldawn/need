@@ -2,6 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:need/auth/login_or_register.dart';
 import 'package:need/firebase_options.dart';
+import 'package:need/pages/home_page.dart';
+import 'package:need/pages/profile_page.dart';
 import 'package:need/theme/dark_theme.dart';
 import 'package:need/theme/light_theme.dart';
 import 'package:provider/provider.dart';

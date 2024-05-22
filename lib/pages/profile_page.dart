@@ -22,7 +22,7 @@ class _ProfilePageState extends State<ProfilePage> {
       String newValue = "";
       await showDialog(context: context, builder: (context) => AlertDialog(
         backgroundColor: Colors.grey[900],
-        title: Text("Edit$field", style: TextStyle(color: Colors.white),),
+        title: Text("Edit $field", style: TextStyle(color: Colors.white),),
         content: TextField(
           autofocus: true,
           style: TextStyle(color: Colors.white),
@@ -60,11 +60,9 @@ class _ProfilePageState extends State<ProfilePage> {
         centerTitle: true,
         actions: [
           IconButton(
-            icon: Icon(
-              context.watch<ThemeProvider>().isDarkMode ? Icons.brightness_3 : Icons.brightness_7,
-            ),
+            icon: Icon(Icons.home),
             onPressed: () {
-              context.read<ThemeProvider>().toggleTheme();
+              Navigator.pushReplacementNamed(context, '/home');
             },
           ),
         ],
