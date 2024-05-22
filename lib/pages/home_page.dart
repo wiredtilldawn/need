@@ -6,6 +6,7 @@ import 'package:need/components/wall_post.dart';
 import 'package:need/pages/profile_page.dart';
 
 import '../components/drawer.dart';
+import '../helper/helper_methods.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -85,7 +86,8 @@ class _HomePageState extends State<HomePage> {
                     return ListView.builder(itemCount: snapshot.data!.docs.length,itemBuilder: (context, index) {
                           //get the message
                       final post = snapshot.data!.docs[index];
-                      return WallPost(message: post['Message'], user: post['UserEmail'], postId: post.id, likes: List<String>.from(post['Likes'] ?? []),);
+                      return WallPost(message: post['Message'], user: post['UserEmail'], postId: post.id, likes: List<String>.from(post['Likes'] ?? []),
+                      time: formatDate(post['Timestamp'],));
                     },
                     );
                   }
